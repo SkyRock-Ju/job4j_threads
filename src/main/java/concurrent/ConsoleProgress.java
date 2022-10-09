@@ -6,33 +6,31 @@ public class ConsoleProgress implements Runnable {
     public void run() {
         int counter = 25;
         while (!Thread.currentThread().isInterrupted()) {
-            while (counter > 100) {
-                counter -= 100;
+            if (counter >= 100) {
+                counter = 0;
             }
             try {
                 Thread.sleep(500);
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            System.out.print("\r Loading ... " + circle(counter));
+            String circle = "";
+            switch (counter) {
+                case 0:
+                    circle = "/";
+                    break;
+                case 25:
+                    circle = "-";
+                    break;
+                case 50:
+                    circle = "\\";
+                    break;
+                case 75:
+                    circle = "|";
+                    break;
+            }
+            System.out.print("\r Loading ... " + circle);
             counter += 25;
-        }
-    }
-
-    private String circle(int counter) {
-        switch (counter) {
-            case 0:
-                return "/";
-            case 25:
-                return "-";
-            case 50:
-                return "\\";
-            case 75:
-                return "|";
-            case 100:
-                return "/";
-            default:
-                return "invalid case number";
         }
     }
 
