@@ -6,7 +6,7 @@ public class ConsoleProgress implements Runnable {
     public void run() {
         int counter = 25;
         while (!Thread.currentThread().isInterrupted()) {
-            if (counter >= 100) {
+            if (counter > 3) {
                 counter = 0;
             }
             try {
@@ -14,23 +14,10 @@ public class ConsoleProgress implements Runnable {
             } catch (InterruptedException e) {
                 Thread.currentThread().interrupt();
             }
-            String circle = "";
-            switch (counter) {
-                case 0:
-                    circle = "/";
-                    break;
-                case 25:
-                    circle = "-";
-                    break;
-                case 50:
-                    circle = "\\";
-                    break;
-                case 75:
-                    circle = "|";
-                    break;
-            }
-            System.out.print("\r Loading ... " + circle);
-            counter += 25;
+
+            String[] circle = {"/", "-", "\\", "|"};
+            System.out.print("\r Loading ... " + circle[counter]);
+            counter++;
         }
     }
 
