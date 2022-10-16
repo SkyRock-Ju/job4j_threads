@@ -29,18 +29,19 @@ public class Wget implements Runnable {
     public void run() {
         try (BufferedInputStream in = new BufferedInputStream(new URL(url).openStream());
              FileOutputStream fileOutputStream = new FileOutputStream(filename)) {
-            byte[] dataBuffer = new byte[speed];
+            byte[] dataBuffer = new byte[1024];
             int bytesRead;
-            int downloadData = 0;
+            int downloadData;
             long timeBefore = System.currentTimeMillis();
-            while ((bytesRead = in.read(dataBuffer, 0, speed)) != -1) {
+            while ((bytesRead = in.read(dataBuffer, 0, 1024)) != -1) {
                 downloadData = bytesRead;
                 fileOutputStream.write(dataBuffer, 0, bytesRead);
-                if (downloadData == speed) {
+                if (downloadData >= speed) {
                     if (System.currentTimeMillis() - timeBefore < 1000) {
                         Thread.sleep(1000 - System.currentTimeMillis() - timeBefore);
-                        timeBefore = System.currentTimeMillis();
                     }
+                    timeBefore = System.currentTimeMillis();
+                    downloadData = 0;
                 }
             }
         } catch (IOException | InterruptedException e) {
@@ -51,6 +52,9 @@ public class Wget implements Runnable {
     public static void main(String[] args) throws InterruptedException {
         if (!args[0].startsWith("http")) {
             throw new InvalidParameterException("Invalid url");
+        }
+        if (args.length!=2){
+            throw new InvalidParameterException("Correct input data as EXAMPLE: \"url speed\"");
         }
         String url = args[0];
         try {
