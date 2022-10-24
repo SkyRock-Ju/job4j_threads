@@ -1,5 +1,7 @@
 package concurrent;
 
+import multithreading.Cache;
+
 public class Wget {
 
     public static void main (String [] args) {
