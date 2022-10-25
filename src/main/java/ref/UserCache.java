@@ -19,7 +19,7 @@ public class UserCache {
         return User.of(users.get(id).getName());
     }
 
-    public synchronized List<User> findAll() {
+    public List<User> findAll() {
         ArrayList<User> usersList = new ArrayList<>();
         users.values().forEach(
                 user -> usersList.add(User.of(user.getName()))
