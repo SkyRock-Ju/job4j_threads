@@ -15,9 +15,11 @@ public class ParseFile {
         reader = new ContentReader(file);
     }
 
-    public void saveContent(String content) throws IOException {
-        BufferedWriter writer = new BufferedWriter(new FileWriter(file));
-        writer.write(content);
-        writer.close();
+    public synchronized void saveContent(String content){
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
+            writer.write(content);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

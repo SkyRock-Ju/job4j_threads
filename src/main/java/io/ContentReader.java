@@ -15,29 +15,31 @@ public class ContentReader {
         this.file = file;
     }
 
-    public String getContent() throws IOException {
+    public String getContent(){
         return content(
                 Objects::nonNull
         );
     }
 
-    public String getContentWithoutUnicode() throws IOException {
+    public String getContentWithoutUnicode(){
         return content(
                 filter -> filter < 0x80
         );
     }
 
-    private String content(Predicate<Character> filter) throws IOException {
-        BufferedReader reader = new BufferedReader(new FileReader(file));
+    private synchronized String content(Predicate<Character> filter) {
         StringBuilder output = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
 
-        int data;
-        while ((data = reader.read()) != -1) {
-            if (filter.test((char) data)) {
-                output.append((char) data);
+            int data;
+            while ((data = reader.read()) != -1) {
+                if (filter.test((char) data)) {
+                    output.append((char) data);
+                }
             }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        reader.close();
         return output.toString();
     }
 }
