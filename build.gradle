@@ -10,8 +10,9 @@ repositories {
 }
 
 dependencies {
-
+    implementation 'org.junit.jupiter:junit-jupiter:5.9.0'
     compileOnly group: 'net.jcip', name: 'jcip-annotations', version: '1.0'
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.6.1'
 }
 
 test {
