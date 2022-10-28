@@ -15,21 +15,19 @@ public class AccountStorage {
     public synchronized boolean add(Account account) {
         if (accounts.containsKey(account.getId()))
             throw new NoSuchElementException("Account not found");
-        return account.equals(
-                accounts.putIfAbsent(account.getId(), account));
+        return accounts.putIfAbsent(account.getId(), account) == null;
     }
 
     public synchronized boolean update(Account account) {
         if (!accounts.containsKey(account.getId()))
             throw new NoSuchElementException("Account not found");
-        return account.equals(
-                accounts.computeIfPresent(account.getId(), (id, acc) -> acc = account));
+        return accounts.replace(account.getId(), account) != null;
     }
 
     public synchronized boolean delete(int id) {
         if (!accounts.containsKey(id))
             throw new NoSuchElementException("Account not found");
-        return id == accounts.remove(id).getId();
+        return accounts.remove(id) != null;
     }
 
     public synchronized Optional<Account> getById(int id) {
