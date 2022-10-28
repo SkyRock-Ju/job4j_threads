@@ -11,6 +11,8 @@ class SimpleBlockingQueueTest {
         SimpleBlockingQueue<Integer> sbq = new SimpleBlockingQueue<>();
         Thread first = new Thread(() -> sbq.offer(randomInt()));
         Thread second = new Thread(sbq::poll);
+        first.start();
+        second.start();
         for (int i = 0; i < 5; i++){
 
             first.join();
