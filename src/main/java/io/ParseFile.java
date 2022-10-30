@@ -15,7 +15,7 @@ public class ParseFile {
         reader = new ContentReader(file);
     }
 
-    public synchronized void saveContent(String content){
+    public synchronized void saveContent(String content) {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(file))) {
             writer.write(content);
         } catch (IOException e) {

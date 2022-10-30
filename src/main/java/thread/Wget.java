@@ -53,7 +53,7 @@ public class Wget implements Runnable {
         if (!args[0].startsWith("http")) {
             throw new InvalidParameterException("Invalid url");
         }
-        if (args.length != 2){
+        if (args.length != 2) {
             throw new InvalidParameterException("Please make sure that your input data is same as EXAMPLE: \"url speed\"");
         }
         String url = args[0];

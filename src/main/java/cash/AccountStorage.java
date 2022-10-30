@@ -13,32 +13,37 @@ public class AccountStorage {
     private final HashMap<Integer, Account> accounts = new HashMap<>();
 
     public synchronized boolean add(Account account) {
-        if (accounts.containsKey(account.getId()))
+        if (accounts.containsKey(account.getId())) {
             throw new NoSuchElementException("Account not found");
+        }
         return accounts.putIfAbsent(account.getId(), account) == null;
     }
 
     public synchronized boolean update(Account account) {
-        if (!accounts.containsKey(account.getId()))
+        if (!accounts.containsKey(account.getId())) {
             throw new NoSuchElementException("Account not found");
+        }
         return accounts.replace(account.getId(), account) != null;
     }
 
     public synchronized boolean delete(int id) {
-        if (!accounts.containsKey(id))
+        if (!accounts.containsKey(id)) {
             throw new NoSuchElementException("Account not found");
+        }
         return accounts.remove(id) != null;
     }
 
     public synchronized Optional<Account> getById(int id) {
-        if (!accounts.containsKey(id))
+        if (!accounts.containsKey(id)) {
             throw new NoSuchElementException("Account not found");
+        }
         return Optional.ofNullable(accounts.get(id));
     }
 
     public synchronized boolean transfer(int fromId, int toId, int amount) {
-        if (!accounts.containsKey(fromId) || !accounts.containsKey(toId))
+        if (!accounts.containsKey(fromId) || !accounts.containsKey(toId)) {
             throw new NoSuchElementException("Account not found");
+        }
         if (accounts.get(fromId).getAmount() < amount) {
             throw new IllegalArgumentException("Insufficient funds");
         }

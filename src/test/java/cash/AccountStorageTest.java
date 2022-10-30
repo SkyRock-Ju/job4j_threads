@@ -31,7 +31,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenDelete(){
+    void whenDelete() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         assertThat(storage.delete(1)).isEqualTo(true);
@@ -39,7 +39,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void whenTransfer(){
+    void whenTransfer() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));
@@ -54,7 +54,7 @@ class AccountStorageTest {
     }
 
     @Test
-    void should_throw_exception_if_amount_is_not_enough() {
+    void shouldThrowExceptionIfAmountIsNotEnough() {
         var storage = new AccountStorage();
         storage.add(new Account(1, 100));
         storage.add(new Account(2, 100));

@@ -4,12 +4,11 @@ import multithreading.Cache;
 
 public class Wget {
 
-    public static void main (String [] args) {
-
+    public static void main(String[] args) {
         System.out.println("Start loading ... ");
         Thread thread = new Thread(
                 () -> {
-                    for (int index = 0; index <= 100; index++){
+                    for (int index = 0; index <= 100; index++) {
                         try {
                             Thread.sleep(100);
                         } catch (InterruptedException e) {

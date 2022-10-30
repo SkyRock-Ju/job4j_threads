@@ -11,17 +11,17 @@ public class ContentReader {
 
     private final File file;
 
-    public ContentReader(File file){
+    public ContentReader(File file) {
         this.file = file;
     }
 
-    public String getContent(){
+    public String getContent() {
         return content(
                 Objects::nonNull
         );
     }
 
-    public String getContentWithoutUnicode(){
+    public String getContentWithoutUnicode() {
         return content(
                 filter -> filter < 0x80
         );
