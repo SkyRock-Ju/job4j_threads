@@ -2,9 +2,6 @@ package multithreading;
 
 import org.junit.jupiter.api.Test;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -20,11 +17,13 @@ class SimpleBlockingQueueTest {
         Thread producer = new Thread(
                 () -> {
                     try {
-                        BufferedReader reader = new BufferedReader(new FileReader("src/test/resources/testText.txt"));
-                        reader.lines().forEach(
-                                buffer::add
-                        );
-                    } catch (IOException e) {
+                        queue.offer("hello");
+                        queue.offer("world");
+                        queue.offer("my");
+                        queue.offer("name");
+                        queue.offer("is");
+                        queue.offer("Julus");
+                    } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
                 }
@@ -48,7 +47,12 @@ class SimpleBlockingQueueTest {
         consumer.interrupt();
         consumer.join();
         ArrayList<String> arraylist = new ArrayList<>();
-        arraylist.add("Hey ladies drop it down just want to see you touch the ground");
+        arraylist.add("hello");
+        arraylist.add("world");
+        arraylist.add("my");
+        arraylist.add("name");
+        arraylist.add("is");
+        arraylist.add("Julus");
         assertThat(buffer, is(arraylist));
     }
 }
