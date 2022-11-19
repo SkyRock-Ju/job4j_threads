@@ -10,7 +10,11 @@ public class CASCount {
     private final AtomicReference<Integer> count = new AtomicReference<>();
 
     public void increment() {
-        count.set(count.get() + 1);
+        int temp;
+        do {
+            temp = count.get() + 1;
+            count.set(temp);
+        } while (!count.compareAndSet(count.get(), temp));
     }
 
     public int get() {
