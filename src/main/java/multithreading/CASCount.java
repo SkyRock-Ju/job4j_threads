@@ -11,11 +11,9 @@ public class CASCount {
 
     public void increment() {
         int temp;
-        int amount = count.get();
         do {
-            temp = amount + 1;
-            count.set(temp);
-        } while (!count.compareAndSet(amount, temp));
+            temp = count.get();
+        } while (!count.compareAndSet(temp, temp + 1));
     }
 
     public int get() {
