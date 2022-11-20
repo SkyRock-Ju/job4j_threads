@@ -12,8 +12,14 @@ public class Cache {
 
     public boolean update(Base model) {
         return memory.computeIfPresent(
-                model.getId(), (id, base) -> checkVersions(model.getVersion(), base.getVersion())
-                        ? new Base(id, model.getVersion() + 1) : null) != null;
+                model.getId(), (id, base) -> {
+                    if (checkVersions(model.getVersion(), base.getVersion())) {
+                        return new Base(id, model.getVersion() + 1);
+                    } else {
+                        return null;
+                    }
+                }
+        ) != null;
     }
 
     public void delete(Base model) {

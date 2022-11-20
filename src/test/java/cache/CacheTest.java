@@ -2,6 +2,7 @@ package cache;
 
 import org.junit.jupiter.api.Test;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class CacheTest {
@@ -45,5 +46,18 @@ public class CacheTest {
         assertTrue(cache.update(secondModelUpdate));
         assertTrue(cache.update(thirdModelUpdate));
         assertTrue(cache.update(fourthModelUpdate));
+    }
+
+    @Test
+    void shouldThrowException() {
+        Cache cache = new Cache();
+        Base firstModel = new Base(1, 1);
+        firstModel.setName("first");
+        Base secondModel = new Base(1, 2);
+        secondModel.setName("second");
+
+        cache.add(firstModel);
+
+        assertThrows(OptimisticException.class, () -> cache.update(secondModel));
     }
 }
