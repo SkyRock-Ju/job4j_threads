@@ -14,10 +14,11 @@ public class Cache {
         return memory.computeIfPresent(
                 model.getId(), (id, base) -> {
                     if (checkVersions(model.getVersion(), base.getVersion())) {
-                        return new Base(id, model.getVersion() + 1);
-                    } else {
-                        return null;
+                        String name = base.getName();
+                        base =  new Base(id, model.getVersion() + 1);
+                        base.setName(name);
                     }
+                    return base;
                 }
         ) != null;
     }
