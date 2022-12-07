@@ -17,11 +17,8 @@ class SimpleBlockingQueueTest {
         Thread producer = new Thread(
                 () -> {
                     try {
-                        queue.offer("hello");
-                        queue.offer("world");
-                        queue.offer("my");
-                        queue.offer("name");
-                        queue.offer("is");
+                        queue.offer("I");
+                        queue.offer("am");
                         queue.offer("Julus");
                     } catch (InterruptedException e) {
                         e.printStackTrace();
@@ -47,11 +44,8 @@ class SimpleBlockingQueueTest {
         consumer.interrupt();
         consumer.join();
         ArrayList<String> arraylist = new ArrayList<>();
-        arraylist.add("hello");
-        arraylist.add("world");
-        arraylist.add("my");
-        arraylist.add("name");
-        arraylist.add("is");
+        arraylist.add("I");
+        arraylist.add("am");
         arraylist.add("Julus");
         assertThat(buffer, is(arraylist));
     }
