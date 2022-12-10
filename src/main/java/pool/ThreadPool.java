@@ -5,17 +5,27 @@ import multithreading.SimpleBlockingQueue;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ThreadPool implements Runnable {
+public class ThreadPool {
 
     private final List<Thread> threads = new LinkedList<>();
-    private SimpleBlockingQueue<Runnable> tasks;
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(5);
+    private final int availableProcessors = Runtime.getRuntime().availableProcessors();
 
-    public ThreadPool(int numberOfTasks) throws InterruptedException {
-        int availableProcessors = Runtime.getRuntime().availableProcessors();
+    public ThreadPool() {
         for (int i = 0; i < availableProcessors; i++) {
-            tasks = new SimpleBlockingQueue<>(numberOfTasks);
-            threads.add(new Thread(tasks.poll()));
-
+            Thread thread = new Thread(
+                    () -> {
+                        while (!Thread.currentThread().isInterrupted()) {
+                            try {
+                                tasks.poll().run();
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+            );
+            thread.start();
+            threads.add(thread);
         }
     }
 
@@ -24,15 +34,17 @@ public class ThreadPool implements Runnable {
     }
 
     public void shutdown() {
-        while (!tasks.isEmpty()) {
-            threads.forEach(Thread::interrupt);
-        }
+        threads.forEach(Thread::interrupt);
     }
 
-    @Override
-    public void run() {
-        while (!tasks.isEmpty()) {
-            threads.forEach(Thread::run);
+    public static void main(String[] args) throws InterruptedException {
+        ThreadPool threadPool = new ThreadPool();
+        for (int i = 0; i < 20; i++) {
+            int taskNo = i;
+            threadPool.work(() -> System.out.println(
+                    Thread.currentThread().getName()
+                            + ": Task " + taskNo));
         }
+        threadPool.shutdown();
     }
 }
