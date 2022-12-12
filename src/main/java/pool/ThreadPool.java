@@ -7,9 +7,9 @@ import java.util.List;
 
 public class ThreadPool {
 
-    private final List<Thread> threads = new LinkedList<>();
-    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(5);
     private final int availableProcessors = Runtime.getRuntime().availableProcessors();
+    private final List<Thread> threads = new LinkedList<>();
+    private final SimpleBlockingQueue<Runnable> tasks = new SimpleBlockingQueue<>(availableProcessors);
 
     public ThreadPool() {
         for (int i = 0; i < availableProcessors; i++) {
@@ -20,6 +20,7 @@ public class ThreadPool {
                                 tasks.poll().run();
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
+                                Thread.currentThread().interrupt();
                             }
                         }
                     }
