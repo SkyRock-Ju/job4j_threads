@@ -2,9 +2,6 @@ package pool;
 
 import org.junit.jupiter.api.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
 
@@ -12,34 +9,29 @@ public class ParallelSearchTest {
 
     @Test
     public void computeRecursiveTest() {
-        int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        Arrays.stream(numbers).forEach(
-                arrayList::add
-        );
-        ParallelSearch<Integer> parallelSearch = new ParallelSearch<>(arrayList, 35);
+        Object[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35};
+        ParallelSearch parallelSearch = new ParallelSearch(numbers, 35);
         assertThat(parallelSearch.compute(), is(34));
     }
 
     @Test
     public void computeLineTest() {
-        int[] numbers = {1, 2, 3, 4, 5, 6};
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        Arrays.stream(numbers).forEach(
-                arrayList::add
-        );
-        ParallelSearch<Integer> parallelSearch = new ParallelSearch<>(arrayList, 1);
+        Object[] numbers = {1, 2, 3, 4, 5, 6};
+        ParallelSearch parallelSearch = new ParallelSearch(numbers, 1);
         assertThat(parallelSearch.compute(), is(0));
     }
 
     @Test
     public void noSuchItemTest() {
-        int[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
-        ArrayList<Integer> arrayList = new ArrayList<>();
-        Arrays.stream(numbers).forEach(
-                arrayList::add
-        );
-        ParallelSearch<Integer> parallelSearch = new ParallelSearch<>(arrayList, 500);
+        Object[] numbers = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20};
+        ParallelSearch parallelSearch = new ParallelSearch(numbers, 500);
         assertThat(parallelSearch.compute(), is(-1));
+    }
+
+    @Test
+    public void differentTypesTest() {
+        Object[] numbers = {"5", '2', 3.3, 4, 5f, 6d, 7, 8, "test", 10};
+        ParallelSearch parallelSearch = new ParallelSearch(numbers, "test");
+        assertThat(parallelSearch.compute(), is(8));
     }
 }
