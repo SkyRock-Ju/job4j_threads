@@ -22,4 +22,15 @@ public class EmailNotification {
     public void send(String subject, String body, String email) {
 
     }
+
+    public void close() {
+        pool.shutdown();
+        while (!pool.isTerminated()) {
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 }
