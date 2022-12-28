@@ -1,26 +1,29 @@
 package pool;
 
-import java.util.Arrays;
 import java.util.concurrent.RecursiveTask;
 
-public class ParallelSearch extends RecursiveTask<Integer> {
-    private final Object[] array;
-    private final Object value;
+public class ParallelSearch<T> extends RecursiveTask<Integer> {
+    private final T[] array;
+    private final T value;
+    private final int from;
+    private final int to;
 
-    ParallelSearch(Object[] array, Object value) {
+    ParallelSearch(T[] array, T value, int from, int to) {
         this.array = array;
         this.value = value;
+        this.from = from;
+        this.to = to;
     }
 
     @Override
     protected Integer compute() {
 
-        if (array.length <= 10) {
-            return indexSearch(array, value);
+        if (to - from <= 10) {
+            return indexSearch(array, value, from, to);
         }
-        int mid = array.length / 2;
-        ParallelSearch leftSearch = new ParallelSearch(Arrays.copyOfRange(array, 0, mid), value);
-        ParallelSearch rightSearch = new ParallelSearch(Arrays.copyOfRange(array, mid, array.length), value);
+        int mid = (from + to)/2;
+        ParallelSearch<T> leftSearch = new ParallelSearch<>(array, value, from, mid);
+        ParallelSearch<T> rightSearch = new ParallelSearch<>(array, value, mid, to);
 
         leftSearch.fork();
         rightSearch.fork();
@@ -31,13 +34,13 @@ public class ParallelSearch extends RecursiveTask<Integer> {
         if (left > right) {
             return left;
         } else if (right > left) {
-            return right + mid;
+            return right;
         }
         return -1;
     }
 
-    private static int indexSearch(Object[] array, Object value) {
-        for (int i = 0; i < array.length; i++) {
+    private int indexSearch(T[] array, T value, int from, int to) {
+        for (int i = from; i < to; i++) {
             if (array[i].equals(value)) {
                 return i;
             }
