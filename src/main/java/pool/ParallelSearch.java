@@ -1,5 +1,6 @@
 package pool;
 
+import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
 
 public class ParallelSearch<T> extends RecursiveTask<Integer> {
@@ -22,8 +23,8 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
         }
         int mid = (from + to) / 2;
 
-        ParallelSearch<Object> leftSearch = new ParallelSearch<>(array, value, from, mid);
-        ParallelSearch<Object> rightSearch = new ParallelSearch<>(array, value, mid, to);
+        ParallelSearch<T> leftSearch = new ParallelSearch<>(array, value, from, mid);
+        ParallelSearch<T> rightSearch = new ParallelSearch<>(array, value, mid, to);
 
         leftSearch.fork();
         rightSearch.fork();
@@ -31,14 +32,11 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
         int left = leftSearch.join();
         int right = rightSearch.join();
 
-        if (left != right) {
-            return Math.max(left, right);
-        }
-        return -1;
+        return Math.max(left, right);
     }
 
 
-    private static int indexSearch(Object[] array, Object value, int from, int to) {
+    private int indexSearch(Object[] array, Object value, int from, int to) {
 
         for (int i = from; i < to; i++) {
             if (array[i].equals(value)) {
@@ -46,6 +44,11 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
             }
         }
         return -1;
+    }
+
+    public static <T> int indexOf(T[] array, T value) {
+        ForkJoinPool pool = new ForkJoinPool();
+        return pool.invoke(new ParallelSearch<>(array, value, 0, array.length - 1));
     }
 }
 
