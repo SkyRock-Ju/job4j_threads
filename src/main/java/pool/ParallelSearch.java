@@ -22,22 +22,17 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
             return indexSearch(array, value, from, to);
         }
         int mid = (from + to) / 2;
-
         ParallelSearch<T> leftSearch = new ParallelSearch<>(array, value, from, mid);
         ParallelSearch<T> rightSearch = new ParallelSearch<>(array, value, mid, to);
-
         leftSearch.fork();
         rightSearch.fork();
-
         int left = leftSearch.join();
         int right = rightSearch.join();
-
         return Math.max(left, right);
     }
 
 
     private int indexSearch(Object[] array, Object value, int from, int to) {
-
         for (int i = from; i < to; i++) {
             if (array[i].equals(value)) {
                 return i;
