@@ -19,7 +19,7 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
     @Override
     protected Integer compute() {
         if (to - from <= 10) {
-            return indexSearch(array, value, from, to);
+            return indexSearch(array, value);
         }
         int mid = (from + to) / 2;
         ParallelSearch<T> leftSearch = new ParallelSearch<>(array, value, from, mid);
@@ -32,7 +32,7 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
     }
 
 
-    private int indexSearch(Object[] array, Object value, int from, int to) {
+    private int indexSearch(Object[] array, Object value) {
         for (int i = from; i < to; i++) {
             if (array[i].equals(value)) {
                 return i;
