@@ -31,7 +31,6 @@ public class ParallelSearch<T> extends RecursiveTask<Integer> {
         return Math.max(left, right);
     }
 
-
     private int indexSearch(Object[] array, Object value) {
         for (int i = from; i < to; i++) {
             if (array[i].equals(value)) {
