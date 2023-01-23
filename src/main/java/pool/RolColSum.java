@@ -6,45 +6,14 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class RolColSum {
-    public static class Sums {
-        private int rowSum;
-        private int colSum;
-
-        public int getRowSum() {
-            return rowSum;
-        }
-
-        public void setRowSum(int rowSum) {
-            this.rowSum = rowSum;
-        }
-
-        public int getColSum() {
-            return colSum;
-        }
-
-        public void setColSum(int colSum) {
-            this.colSum = colSum;
-        }
-    }
 
     public static Sums[] sum(int[][] matrix) {
         Sums[] sums = new Sums[matrix.length];
-        int[] rowSums = new int[matrix.length];
-        for (int row = 0; row < matrix.length; row++) {
-            for (int col = 0; col < matrix[row].length; col++) {
-                rowSums[row] += matrix[row][col];
-            }
-        }
-        int[] colSums = new int[matrix[0].length];
-        for (int col = 0; col < matrix[0].length; col++) {
-            for (int row = 0; row < matrix.length; row++) {
-                colSums[col] += matrix[row][col];
-            }
-        }
         for (int i = 0; i < matrix.length; i++) {
             sums[i] = new Sums();
-            sums[i].setColSum(colSums[i]);
-            sums[i].setRowSum(rowSums[i]);
+            int[] result = calculate(matrix, i);
+            sums[i].setRowSum(result[0]);
+            sums[i].setColSum(result[1]);
         }
         return sums;
     }
@@ -65,16 +34,16 @@ public class RolColSum {
     }
 
     private static CompletableFuture<int[]> sumsTask(int[][] matrix, int index) {
-        return CompletableFuture.supplyAsync(() -> {
-            int rowSum = 0;
-            int colSum = 0;
-            for (int col = 0; col < matrix.length; col++) {
-                colSum += matrix[col][index];
-            }
-            for (int row = 0; row < matrix.length; row++) {
-                rowSum += matrix[index][row];
-            }
-            return new int[]{rowSum, colSum};
-        });
+        return CompletableFuture.supplyAsync(() -> calculate(matrix, index));
+    }
+
+    private static int[] calculate(int[][] matrix, int index) {
+        int rowSum = 0;
+        int colSum = 0;
+        for (int i = 0; i < matrix.length; i++) {
+            colSum += matrix[i][index];
+            rowSum += matrix[index][i];
+        }
+        return new int[]{rowSum, colSum};
     }
 }
